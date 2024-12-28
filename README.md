@@ -13,6 +13,8 @@
    ```
 4. Open the application in your browser at `http://localhost:3000`.
 ## How It Works
+(The embedd lowers the video quality a ton, actual demo is clearer)
+
 https://github.com/user-attachments/assets/de372e46-bc54-4b85-aa6b-4695134e15b1
 
 ### 1. Page Carousel
