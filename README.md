@@ -1,17 +1,17 @@
 ### Deployment
    1. Clone the repository:
       ```bash
-      > git clone https://github.com/TylerGeiger513/CSC418-Project-2.git
-      > cd CSC418-Project-2
+      git clone https://github.com/TylerGeiger513/CSC418-Project-2.git
+      cd CSC418-Project-2
       ```
    2. Build and Start Using Docker Compose: Ensure Docker and Docker Compose are installed on your system, then run:
       ```bash
-      > docker-compose up --build
+      docker-compose up --build
       ```   
    3. Open the application in your browser at `http://localhost:3000`.
    4. To stop the application use
       ```bash
-      > docker-compose down
+      docker-compose down
       ```
 ### (New Demo with MongoDB Integrated)
 https://github.com/user-attachments/assets/6648eb21-26cf-4443-8e4f-0d793fbd0e15
