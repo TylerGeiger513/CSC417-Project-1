@@ -1,21 +1,18 @@
 ### Deployment
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/TylerGeiger513/CSC417-Project-1.git
-   ```
-2. Build and Start Using Docker Compose: Ensure Docker and Docker Compose are installed on your system, then run:
-   ```bash
-   docker-compose up --build
-   ```
-3. Open the application in your browser at `http://localhost:3000`.
-
-4. To stop the application use
-```bash
-docker-compose down
-```
+   1. Clone the repository:
+      ```bash
+      > git clone https://github.com/TylerGeiger513/CSC417-Project-1.git
+      ```
+   2. Build and Start Using Docker Compose: Ensure Docker and Docker Compose are installed on your system, then run:
+      ```bash
+      > docker-compose up --build
+      ```   
+   3. Open the application in your browser at `http://localhost:3000`.
+   4. To stop the application use
+      ```bash
+      > docker-compose down
+      ```
 ## How It Works
-(The embedd lowers the video quality a ton, actual demo is clearer)
-
 https://github.com/user-attachments/assets/de372e46-bc54-4b85-aa6b-4695134e15b1
 
 ### 1. Page Carousel
