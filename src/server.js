@@ -4,8 +4,12 @@ const bodyParser = require('body-parser');
 const routes = require('./routes/router');
 const locationRouter = require('./routes/location-router');
 const usersRouter = require('./routes/usersRouter');
+const connectToDatabase = require('./db');
 
 const app = express();
+
+connectToDatabase(); 
+console.log('Connected to MongoDB');
 
 // Set view engine
 app.set('view engine', 'ejs');

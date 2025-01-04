@@ -1,37 +1,63 @@
 const express = require('express');
 const usersRouter = express.Router();
-const defaultUsers = require('../models/defaultUsers');
-let users = [];
+const User = require('../models/userModel');
 
-// Load default users
-users = defaultUsers;
 
 // Create a new user
-usersRouter.post('/create', (req, res) => {
-    const { email, name, state, city } = req.body;
+usersRouter.post('/create', async (req, res) => {
+  const { email, name, state, city } = req.body;
 
-    // Validate user input
-    if (!email || !name || !state || !city) {
-        return res.status(400).json({ error: 'All fields are required.' });
+  if (!email || !name || !state || !city) {
+    return res.status(400).json({ error: 'All fields are required.' });
+  }
+
+  try {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ error: 'User already exists.' });
     }
 
-    if (users.find((user) => user.email === email)) {
-        return res.status(400).json({ error: 'User already exists.' });
-    }
+    const newUser = new User({ email, name, state, city });
+    await newUser.save();
 
-    const newUser = { email, name, state, city };
-    // - will be replaced with the actual database query to insert a new user in future
-    const addUser = (user) => {
-        users.push(user);
-    };
-    addUser(newUser);
-
+    console.log('New user added:', newUser);
     res.status(201).json({ message: 'User created successfully', user: newUser });
+  } catch (error) {
+    console.error('Error creating user:', error);
+    res.status(500).json({ error: 'Internal server error.' });
+  }
+});
+
+// Delete a user
+usersRouter.post('/delete', async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ error: 'Email is required.' });
+  }
+
+  try {
+    const deletedUser = await User.findOneAndDelete({ email });
+    if (!deletedUser) {
+      return res.status(404).json({ error: 'User not found.' });
+    }
+
+    res.json({ message: 'User deleted successfully.', user: deletedUser });
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    res.status(500).json({ error: 'Internal server error.' });
+  }
 });
 
 // Get all users
-usersRouter.get('/', (req, res) => {
+usersRouter.get('/', async (req, res) => {
+  try {
+    const users = await User.find();
     res.json(users);
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).json({ error: 'Internal server error.' });
+  }
 });
 
 module.exports = usersRouter;
