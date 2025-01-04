@@ -3,15 +3,16 @@
    ```bash
    git clone https://github.com/TylerGeiger513/CSC417-Project-1.git
    ```
-2. Install dependencies:
+2. Build and Start Using Docker Compose: Ensure Docker and Docker Compose are installed on your system, then run:
    ```bash
-   npm install
+   docker-compose up --build
    ```
-3. Start the server:
-   ```bash
-   npm start
-   ```
-4. Open the application in your browser at `http://localhost:3000`.
+3. Open the application in your browser at `http://localhost:3000`.
+
+4. To stop the application use
+```bash
+docker-compose down
+```
 ## How It Works
 (The embedd lowers the video quality a ton, actual demo is clearer)
 
