@@ -488,7 +488,6 @@ body {
 }
 
 .user-card:hover {
-  cursor: pointer;
   transform: scale(1.05);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
@@ -534,4 +533,21 @@ body {
 
 .user-card-details p strong {
   color: var(--primary-a40);
+}
+
+.user-delete-button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  background-color: var(--primary-a40);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.user-delete-button:hover {
+  background-color: var(--primary-a50);
+  transform: scale(1.05);
 }

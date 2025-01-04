@@ -28,16 +28,24 @@ usersRouter.post('/create', async (req, res) => {
   }
 });
 
-// Delete a user
+// Delete the user with the given ID or email
 usersRouter.post('/delete', async (req, res) => {
-  const { email } = req.body;
+  const { email, id } = req.body;
 
-  if (!email) {
-    return res.status(400).json({ error: 'Email is required.' });
+  if (!email && !id) {
+    return res.status(400).json({ error: 'Either email or id is required.' });
+  }
+
+  const query = {};
+  if (id) {
+    query._id = id;     
+  } else if (email) {
+    query.email = email; 
   }
 
   try {
-    const deletedUser = await User.findOneAndDelete({ email });
+    const deletedUser = await User.findOneAndDelete(query); 
+
     if (!deletedUser) {
       return res.status(404).json({ error: 'User not found.' });
     }
@@ -48,6 +56,7 @@ usersRouter.post('/delete', async (req, res) => {
     res.status(500).json({ error: 'Internal server error.' });
   }
 });
+
 
 // Get all users
 usersRouter.get('/', async (req, res) => {
