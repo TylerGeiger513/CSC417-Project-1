@@ -1,7 +1,7 @@
 ### Deployment
    1. Clone the repository:
       ```bash
-      > git clone https://github.com/TylerGeiger513/CSC417-Project-1.git
+      > git clone https://github.com/TylerGeiger513/CSC418-Project-2.git
       ```
    2. Build and Start Using Docker Compose: Ensure Docker and Docker Compose are installed on your system, then run:
       ```bash
