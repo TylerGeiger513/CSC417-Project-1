@@ -1,3 +1,5 @@
+
+
 document.addEventListener('contentLoaded', (event) => {
   const currentItem = event.detail?.currentItem;
 
@@ -26,8 +28,10 @@ document.addEventListener('contentLoaded', (event) => {
   };
 
   const fetchUsers = async () => {
+    const apiURL = 'http://localhost:3000/api';
     try {
-      const response = await fetch('/api/users');
+      const response = await fetch(`${apiURL}/users?format=json`);
+      console.log(`${apiURL}/users?format=json`)
       if (!response.ok) {
         throw new Error('Network response was not okay');
       }
@@ -52,8 +56,9 @@ document.addEventListener('contentLoaded', (event) => {
   };
 
   const deleteUserOnServer = async (userId) => {
+    const apiURL = 'http://localhost:3000/api';
     try {
-      const response = await fetch('/api/users/delete', {
+      const response = await fetch(`${apiURL}/users/delete`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: userId }), 

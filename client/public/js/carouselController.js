@@ -1,4 +1,6 @@
 // Client-side script to strictly control the carousel animation and logic - content is laoded in pageLoader.js
+
+
 document.addEventListener('DOMContentLoaded', () => {
   const carouselItems = document.querySelectorAll('.carousel-item');
   const navLinks = document.querySelectorAll('.nav-link');

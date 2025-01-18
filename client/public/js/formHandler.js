@@ -1,3 +1,5 @@
+const apiURL = 'http://localhost:3000/api';
+
 document.addEventListener('contentLoaded', (event) => {
     const currentItem = event.detail?.currentItem;
 
@@ -20,7 +22,7 @@ document.addEventListener('contentLoaded', (event) => {
 
         // Send data to the server
         try {
-            const response = await fetch('/api/users/create', {
+            const response = await fetch(`${apiURL}/users/create`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -54,7 +56,7 @@ document.addEventListener('contentLoaded', (event) => {
     // Fetch states and populate the dropdown
     const fetchStates = async () => {
         try {
-            const response = await fetch('/api/locations/states');
+            const response = await fetch(`${apiURL}/locations/states`);
             const states = await response.json();
 
             stateSelect.innerHTML = '<option value="">Select a state</option>';
@@ -75,7 +77,7 @@ document.addEventListener('contentLoaded', (event) => {
     const fetchCities = async (stateCode) => {
 
         try {
-            const response = await fetch(`/api/locations/cities?stateCode=${stateCode}`);
+            const response = await fetch(`${apiURL}/locations/cities?stateCode=${stateCode}`);
             const cities = await response.json();
             console.log(stateCode, cities)
 

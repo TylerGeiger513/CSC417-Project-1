@@ -1,0 +1,21 @@
+{
+  "name": "csc417-project1",
+  "version": "1.0.0",
+  "description": "CSC417 Project 1",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "start": "node src/client.js"
+  },
+  "author": "Tyler Gegier",
+  "license": "ISC",
+  "dependencies": {
+    "chroma-js": "^3.1.2",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TylerGeiger513/CSC417-Project-1.git"
+  }
+}
