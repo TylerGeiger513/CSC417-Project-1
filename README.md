@@ -1,89 +1,79 @@
 ### Deployment
    1. Clone the repository:
       ```bash
-      > git clone https://github.com/TylerGeiger513/CSC418-Project-2.git
+      git clone https://github.com/TylerGeiger513/CSC418-Project-2.git
+      cd CSC418-Project-2
       ```
    2. Build and Start Using Docker Compose: Ensure Docker and Docker Compose are installed on your system, then run:
       ```bash
-      > docker-compose up --build
+      docker-compose up --build
       ```   
    3. Open the application in your browser at `http://localhost:3000`.
    4. To stop the application use
       ```bash
-      > docker-compose down
+      docker-compose down
       ```
-## How It Works
-https://github.com/user-attachments/assets/de372e46-bc54-4b85-aa6b-4695134e15b1
+### (New Demo with MongoDB Integrated)
+https://github.com/user-attachments/assets/6648eb21-26cf-4443-8e4f-0d793fbd0e15
 
-### 1. Page Carousel
-I wanted to do a little bit more than the basic navigation bar and URL-based page switching. For this project, I mocked the functionality of a page-based application by using a carousel to rotate between pages. However, to avoid the static rendering that comes without page reloads/url redirects, this project dynamically re-renders each page when the carousel rotates, allowing it to still fetch content dynamically while appearing as if there is no reload/navigation.
+### Project 2 (Mongo DB Integration)
+For project 2 we added MongoDB as a persistent data store, allowing creation and deletion of users to throughout server restarts.
 
-To do this, I separated the page rendering from carousel functionality. A client-side JavaScript file, `pageLoader.js`, manages the fetching and unloading of content dynamically. When the carousel rotates, it fetches the relevant page content from the server and replaces the current page's content:
+#### Explanation
 
-```javascript
-// pageLoader.js
-const response = await fetch(`/pages/${pageId}`);
-const html = await response.text();
-contentDiv.innerHTML = html;
+1. `docker-compose.yml`: exposes the ports:
+   - MongoDB: ``27017``
+   - Node/Express App: ``3000``
+2. Mongoose defines the user schema as:
+   ```js
+   email: {
+      type: String,
+      required: true,
+      lowercase: true,
+      unique: true,
+      trim: true,
+    },
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    state: {
+      type: String,
+      required: true,
+    },
+    city: {
+      type: String,
+      required: true,
+    }
+
+4. When the 'create' or 'delete' user buttons are clicked - client side js in `usersLoader.js` or `formHandler.js` make their respective calls with the user data parameters:
+```js
+// formHandler.js - create
+const response = await fetch('/api/users/create', {
+   method: 'POST',
+      headers: {
+         'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, name, state, city }),
+});
 ```
-
-This happens after the previous page has been unloaded.
-
----
-
-### 2. Client-Server Separation
-The client and server are separated to handle their necessary functionalities
-
-#### Server Responsibilities:
-- **Endpoints:**
-  - `(GET) /`: Returns the main layout or index page.
-  - `(GET) /pages/:id`: Returns a specific page as EJS/HTML based on the `id`. For example:
-    ```javascript
-    // pageModel.js
-    const pages = [
-      { id: 'home', navTitle: 'Home', defaultLanding: true },
-      { id: 'users', navTitle: 'Users', defaultLanding: false },
-      { id: 'contacts', navTitle: 'Add Contacts', defaultLanding: false }
-    ];
-    ```
-    - Where /pages/contacts would return:
-  
-   ```ejs
-  <form id="user-form">
-    <h2>Add User</h2>
-    <label for="name">Name:</label>
-    <input type="name" id="name" name="name" placeholder="Enter the user's name" required>
-
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" placeholder="Enter the user's email" required>
-
-    <label for="state">State:</label>
-    <select id="state" name="state" required>
-        <option value="">Select a state</option>
-    </select>
-
-    <label for="city">City:</label>
-    <select id="city" name="city" required disabled>
-        <option value="">Select a city</option>
-    </select>
-
-    <button id="submit">Add User</button>
-</form>
+```js
+// usersLoader.js - delete
+try {
+      const response = await fetch('/api/users/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: userId }), 
+      });
 ```
-
-  - `(GET) /api/locations/states`: Returns a list of states using the [country-state-city-js](https://www.npmjs.com/package/country-state-city-js) package.
-  - `(GET) /api/locations/cities`: Returns a list of cities for a specific state (e.g., `/api/locations/cities?stateCode=PA`).
-  - `(POST) /api/users/create`: Accepts user data (`email`, `name`, `state`, `city`) and stores it on the server.
-  - `(GET) /api/users`: Returns a list of all users in JSON format.
-
-- **Server-Side Form Validation:** The server also handles form validation (kinda? - enough for the basic requirements of this demo project).
-
-
-#### Client Responsibilities:
-The client handles all UI-related logic, including:
-- The carousel functionality and dynamic content loading.
-- Forms, clocks, and other interactive elements.
-
-I wanted to keep the server as light-weight as possible and handle the bulk of the UI logic, animations, etc... on the client side, and keep only the necessary endpoints on the servers end.  
-
-
+5. The server recieves the request and reads/writes to the database
+```js
+// usersRouter.js
+   usersRouter.post('/create', async (req, res) => {
+      const { email, name, state, city } = req.body;
+      //... other logic
+      const newUser = new User({ email, name, state, city });
+       await newUser.save(); // save the user 
+       res.status(201).json({ message: 'User created successfully', user: newUser });
+```
