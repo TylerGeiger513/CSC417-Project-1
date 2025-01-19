@@ -8,6 +8,13 @@ const defaultUsers = [
 
 const seedDatabase = async () => {
     try {
+        // only seed the database if no users exist
+        const existingUsers = await User.find({});
+        if (existingUsers.length) {
+            console.log('User data already exists. Skipping seeding process.');
+            return;
+        }
+           
         await User.deleteMany({});
         console.log('Existing user data cleared.');
 

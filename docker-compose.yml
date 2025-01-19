@@ -6,9 +6,13 @@ services:
       context: ./server
       dockerfile: Dockerfile.server
     ports:
-      - "3000:3000"
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    env_file:
+      - .env
     environment:
-      - MONGO_URL=mongodb://mongo:27017/project2
+      - SERVER_HOST=${SERVER_HOST}
+      - SERVER_PORT=${SERVER_PORT}
+      - MONGO_URL=${MONGO_URL} # Pass the global MongoDB URL
     depends_on:
       - mongo
 
@@ -17,7 +21,12 @@ services:
       context: ./client
       dockerfile: Dockerfile.client
     ports:
-      - "4200:4200"
+      - "${CLIENT_PORT}:${CLIENT_PORT}"
+    env_file:
+      - .env
+    environment:
+      - CLIENT_PORT=${CLIENT_PORT}
+      - API_URL=${API_URL}
     depends_on:
       - server
 
@@ -25,7 +34,7 @@ services:
     image: mongo:5
     container_name: mongodb
     ports:
-      - "27017:27017"
+      - "${MONGO_PORT}:${MONGO_PORT}"
     volumes:
       - mongo_data:/data/db
 

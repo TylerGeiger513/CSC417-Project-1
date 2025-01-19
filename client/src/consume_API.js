@@ -1,17 +1,14 @@
+const axios = require('axios');
 
-const consumeAPI = async () => {
+const consumeAPI = async (apiURL) => {
     try {
-        const response = await fetch('http://localhost:3000/api/users?format=json');
-        if (!response.ok) {
-            throw new Error('Network response was not okay');
-        }
-        const users = await response.json();
-        console.log('Users:', users);
+        const response = await axios.get(`${apiURL}/users?format=json`);
+        console.log('Users:', response.data);
+        return response.data; // Return the fetched users
     } catch (error) {
-        console.error('Error fetching users:', error);
+        console.error('Error fetching users:', error.message);
+        throw error; // Rethrow the error for further handling
     }
-}
-
+};
 
 module.exports = consumeAPI;
-

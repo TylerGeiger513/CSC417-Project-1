@@ -1,5 +1,4 @@
-const apiURL = 'http://localhost:3000/api';
-
+const apiURL = window.env.API_URL;
 document.addEventListener('contentLoaded', (event) => {
     const currentItem = event.detail?.currentItem;
 

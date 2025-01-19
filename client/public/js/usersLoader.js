@@ -28,7 +28,7 @@ document.addEventListener('contentLoaded', (event) => {
   };
 
   const fetchUsers = async () => {
-    const apiURL = 'http://localhost:3000/api';
+    const apiURL = window.env.API_URL;
     try {
       const response = await fetch(`${apiURL}/users?format=json`);
       console.log(`${apiURL}/users?format=json`)
@@ -56,7 +56,7 @@ document.addEventListener('contentLoaded', (event) => {
   };
 
   const deleteUserOnServer = async (userId) => {
-    const apiURL = 'http://localhost:3000/api';
+    const apiURL = window.env.API_URL;
     try {
       const response = await fetch(`${apiURL}/users/delete`, {
         method: 'POST',
