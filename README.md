@@ -35,7 +35,7 @@ MONGO_DB=project3
 
 MONGO_URL=mongodb://${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB}
 ```
-### Server/Client separation (Project 3, Server acts as RestAPI)
+### 3. Server/Client separation (Project 3, Server acts as RestAPI)
 
 #### ./Server/
 
