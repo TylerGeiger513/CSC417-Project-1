@@ -47,13 +47,23 @@ MONGO_URL=mongodb://${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB}
   - **GET** `/api/locations/states`: Fetch all states.
   - **GET** `/api/locations/cities?stateCode=STATE_CODE`: Fetch cities by state code.
   - **GET** `/api/health`: Health check endpoint.
+ 
+    Example: `http://localhost:3000/api/users?format=json`
+    returns
+![image](https://github.com/user-attachments/assets/2d0c1bb5-ad64-4fcb-ab12-8677e41052f0)
+
 
 ### ./Client/
 
 - The client runs on https://localhost:4200 and consumes the server's api for data and functionality. 
 The client handles the front end, with only the default endpoint `https://localhost:4200/` which returns the index page ejs `/client/src/views/layout.ejs` 
 
-The client calls the server's API on port 3000 to dynamically load the content on the page, similar to the previous submission however now using the server's new endpoint. 
+![image](https://github.com/user-attachments/assets/1e3a043c-e2af-4639-bca6-816d9ce170e3)
+
+Unlike in the previous submissions, the database cannot be accessed through the client connection as seen when calling localhost:4200/users
+![image](https://github.com/user-attachments/assets/2e4fac93-f0cc-4415-9e98-a4e7c0c30f8c)
+
+Instead, client calls the server's API on port 3000 to dynamically load the content on the page, similar to the previous submission however now using the server's new endpoint. 
 Example: `/client/public/js/usersLoader.js`
 ```js
 const fetchUsers = async () => {
@@ -64,8 +74,14 @@ const fetchUsers = async () => {
       const users = await response.json();
       // logic to render response users on page
     } catch (error) {
-      //...
+      // error handling..
     }
   };
   ```
+
+
+
+https://github.com/user-attachments/assets/fa9d3287-edbb-46cf-88e1-102e56dbbe4b
+
+
 
