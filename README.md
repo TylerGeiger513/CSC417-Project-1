@@ -1,79 +1,71 @@
-### Deployment
-   1. Clone the repository:
-      ```bash
-      git clone https://github.com/TylerGeiger513/CSC418-Project-2.git
-      cd CSC418-Project-2
-      ```
-   2. Build and Start Using Docker Compose: Ensure Docker and Docker Compose are installed on your system, then run:
-      ```bash
-      docker-compose up --build
-      ```   
-   3. Open the application in your browser at `http://localhost:3000`.
-   4. To stop the application use
-      ```bash
-      docker-compose down
-      ```
-### (New Demo with MongoDB Integrated)
-https://github.com/user-attachments/assets/6648eb21-26cf-4443-8e4f-0d793fbd0e15
+## Project Documentation
 
-### Project 2 (Mongo DB Integration)
-For project 2 we added MongoDB as a persistent data store, allowing creation and deletion of users to throughout server restarts.
+### 1. Deployment
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/TylerGeiger513/CSC418-Project-2.git
+   cd CSC418-Project-2
+   ```
+2. Build and Start Using Docker Compose: Ensure Docker and Docker Compose are installed on your system, then run:
+   ```bash
+   docker-compose up --build
+   ```   
+3. Open the client side application in your browser at `http://localhost:4200`.
+4. To stop the application use:
+   ```bash
+   docker-compose down
+   ```
 
-#### Explanation
+### 2. Environment Variables
+The global `.env` allows you to customize the port and host address instead of the default 4200 for client and 3000 for server. Additionally allows you to modify the database connection details without modifying the rest of the source code. 
+```.env
+# Server Configuration
+SERVER_HOST=http://localhost
+SERVER_PORT=3000
 
-1. `docker-compose.yml`: exposes the ports:
-   - MongoDB: ``27017``
-   - Node/Express App: ``3000``
-2. Mongoose defines the user schema as:
-   ```js
-   email: {
-      type: String,
-      required: true,
-      lowercase: true,
-      unique: true,
-      trim: true,
-    },
-    name: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    state: {
-      type: String,
-      required: true,
-    },
-    city: {
-      type: String,
-      required: true,
+# Client Configuration
+CLIENT_PORT=4200
+API_URL=${SERVER_HOST}:${SERVER_PORT}/api
+API_INTERNAL_URL=http://server:${SERVER_PORT}/api
+
+# MongoDB Configuration
+MONGO_HOST=mongo
+MONGO_PORT=27017
+MONGO_DB=project3
+
+MONGO_URL=mongodb://${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB}
+```
+### Server/Client separation (Project 3, Server acts as RestAPI)
+
+#### ./Server/
+
+- The server provides only the `/api` routes at `https://localhost:3000`
+- **Endpoints**:
+  - **GET** `/api/users?format=json`: Fetch all users in JSON format.
+  - **POST** `/api/users/create`: Create a new user.
+  - **POST** `/api/users/delete`: Delete a user by email or ID.
+  - **GET** `/api/locations/states`: Fetch all states.
+  - **GET** `/api/locations/cities?stateCode=STATE_CODE`: Fetch cities by state code.
+  - **GET** `/api/health`: Health check endpoint.
+
+### ./Client/
+
+- The client runs on https://localhost:4200 and consumes the server's api for data and functionality. 
+The client handles the front end, with only the default endpoint `https://localhost:4200/` which returns the index page ejs `/client/src/views/layout.ejs` 
+
+The client calls the server's API on port 3000 to dynamically load the content on the page, similar to the previous submission however now using the server's new endpoint. 
+Example: `/client/public/js/usersLoader.js`
+```js
+const fetchUsers = async () => {
+    const apiURL = window.env.API_URL; // (https://localhost:3000/api)
+    try {
+      const response = await fetch(`${apiURL}/users?format=json`);
+      // ...
+      const users = await response.json();
+      // logic to render response users on page
+    } catch (error) {
+      //...
     }
+  };
+  ```
 
-4. When the 'create' or 'delete' user buttons are clicked - client side js in `usersLoader.js` or `formHandler.js` make their respective calls with the user data parameters:
-```js
-// formHandler.js - create
-const response = await fetch('/api/users/create', {
-   method: 'POST',
-      headers: {
-         'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, name, state, city }),
-});
-```
-```js
-// usersLoader.js - delete
-try {
-      const response = await fetch('/api/users/delete', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: userId }), 
-      });
-```
-5. The server recieves the request and reads/writes to the database
-```js
-// usersRouter.js
-   usersRouter.post('/create', async (req, res) => {
-      const { email, name, state, city } = req.body;
-      //... other logic
-      const newUser = new User({ email, name, state, city });
-       await newUser.save(); // save the user 
-       res.status(201).json({ message: 'User created successfully', user: newUser });
-```
